@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+    networks:
+    - deployml_network
+
+  webserver:
+    image: token-bucket-webserver
+    build:
+      context: .
+    ports:
+    - "0.0.0.0:8080:80"
+    networks:
+    - deployml_network
+    depends_on:
+    - redis
+    env_file:
+    - .env
+    volumes:
+    - ./:/code/app
+
+networks:
+    deployml_network:
