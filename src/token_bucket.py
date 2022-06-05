@@ -1,7 +1,8 @@
 """Token Bucket Class"""
-from src.util.redis import RedisClient
 import os
 import time
+
+from src.util.redis import RedisClient
 
 
 def refresh_tokens() -> None:

@@ -1,8 +1,10 @@
-from fastapi import FastAPI, Request, Response
-import time
-import dotenv
-from src.token_bucket import TokenBucket, refresh_tokens
 import multiprocessing
+import time
+
+import dotenv
+from fastapi import FastAPI, Request, Response
+
+from src.token_bucket import TokenBucket, refresh_tokens
 
 dotenv.load_dotenv()
 app = FastAPI()
