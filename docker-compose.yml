@@ -5,6 +5,8 @@ services:
     image: redis
     networks:
     - deployml_network
+    ports:
+    - "0.0.0.0:6379:6379"
 
   webserver:
     image: token-bucket-webserver
@@ -19,7 +21,7 @@ services:
     env_file:
     - .env
     volumes:
-    - ./:/code/app
+    - ./:/code
 
 networks:
     deployml_network:
