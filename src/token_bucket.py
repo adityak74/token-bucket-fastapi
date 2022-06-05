@@ -3,6 +3,7 @@ from src.util.redis import RedisClient
 import os
 import time
 
+
 def refresh_tokens() -> None:
     """refresh tokens"""
     redis = RedisClient().get_client()
@@ -13,9 +14,12 @@ def refresh_tokens() -> None:
         time.sleep(1)
         t = t - 1
         if t == 0:
-            if int(redis.get("BUCKET_SIZE")) < (int(os.getenv("BUCKET_SIZE")) - refill_size):
+            if int(redis.get("BUCKET_SIZE")) < (
+                int(os.getenv("BUCKET_SIZE")) - refill_size
+            ):
                 redis.set("BUCKET_SIZE", (int(redis.get("BUCKET_SIZE")) + refill_size))
             t = refill_interval
+
 
 class TokenBucket:
     """Token Bucket"""

@@ -7,9 +7,8 @@ import multiprocessing
 dotenv.load_dotenv()
 app = FastAPI()
 token_bucket = TokenBucket()
-multiprocessing.Process(
-    target=refresh_tokens
-).start()
+multiprocessing.Process(target=refresh_tokens).start()
+
 
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
