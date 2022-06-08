@@ -8,6 +8,7 @@ from src.util.redis import RedisClient
 def refresh_tokens() -> None:
     """refresh tokens"""
     redis = RedisClient().get_client()
+    total_bucket_size = int(os.getenv("BUCKET_SIZE"))
     refill_interval = int(os.getenv("BUCKET_REFILL_INTERVAL"))
     refill_size = int(os.getenv("BUCKET_REFILL_SIZE"))
     t = int(refill_interval)
@@ -15,10 +16,17 @@ def refresh_tokens() -> None:
         time.sleep(1)
         t = t - 1
         if t == 0:
-            if int(redis.get("BUCKET_SIZE")) < (
-                int(os.getenv("BUCKET_SIZE")) - refill_size
+            current_bucket_size = int(redis.get('BUCKET_SIZE'))
+            if current_bucket_size < (
+                total_bucket_size - refill_size
             ):
-                redis.set("BUCKET_SIZE", (int(redis.get("BUCKET_SIZE")) + refill_size))
+                pipe = redis.pipeline()
+                pipe.multi()
+                if current_bucket_size <= 0:
+                    pipe.set("BUCKET_SIZE", total_bucket_size)
+                else:
+                    pipe.set("BUCKET_SIZE", int(current_bucket_size) + refill_size)
+                pipe.execute()
             t = refill_interval
 
 
