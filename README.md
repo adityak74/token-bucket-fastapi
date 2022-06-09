@@ -11,6 +11,7 @@ A Python Flask App + Redis Cache implementation of the algorithm.
 BUCKET SIZE 2500, REFILL SIZE 250, INTERVAL 1 SEC
 
 ![Without Concurrency Check](images/Histogram-1.png)
+
 Without Concurrency Check for Redis
 
 **WRK Stats**
@@ -20,6 +21,7 @@ Non-2xx or 3xx responses: 1696
 ```
 
 ![With Concurrency Check](images/Histogram-2.png)
+
 With Concurrency Check using Redis Pipeline transactions that smoothens the curve
 
 
@@ -31,6 +33,7 @@ Non-2xx or 3xx responses: 223
 
 
 ![With Concurrency Check](images/Histogram-3.png)
+
 With Concurrency Check for Redis Pipeline, bump to bucket size on hitting empty bucket
 
 **WRK Stats**
