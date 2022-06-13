@@ -16,10 +16,8 @@ def refresh_tokens() -> None:
         time.sleep(1)
         t = t - 1
         if t == 0:
-            current_bucket_size = int(redis.get('BUCKET_SIZE'))
-            if current_bucket_size < (
-                total_bucket_size - refill_size
-            ):
+            current_bucket_size = int(redis.get("BUCKET_SIZE"))
+            if current_bucket_size < (total_bucket_size - refill_size):
                 pipe = redis.pipeline()
                 pipe.multi()
                 if current_bucket_size <= 0:
@@ -37,6 +35,9 @@ class TokenBucket:
         """Init"""
         self.redis = RedisClient().get_client()
         self.redis.set("BUCKET_SIZE", os.getenv("BUCKET_SIZE"))
+        self.critical_tokens = round(
+            int(os.getenv("BUCKET_SIZE")) * float(os.getenv("CRITICAL_BUCKET"))
+        )
 
     def set_tokens(self, count):
         """Set tokens"""
