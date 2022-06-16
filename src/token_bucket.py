@@ -4,6 +4,11 @@ import time
 
 from src.util.redis import RedisClient
 
+refill_script_lua = open(
+    os.path.join(os.path.dirname(__file__), "..", "scripts", "refill-tokens.lua")
+)
+refill_script = refill_script_lua.read()
+
 
 def refresh_tokens() -> None:
     """refresh tokens"""
@@ -16,15 +21,7 @@ def refresh_tokens() -> None:
         time.sleep(1)
         t = t - 1
         if t == 0:
-            current_bucket_size = int(redis.get("BUCKET_SIZE"))
-            if current_bucket_size < (total_bucket_size - refill_size):
-                pipe = redis.pipeline()
-                pipe.multi()
-                if current_bucket_size <= 0:
-                    pipe.set("BUCKET_SIZE", total_bucket_size)
-                else:
-                    pipe.set("BUCKET_SIZE", int(current_bucket_size) + refill_size)
-                pipe.execute()
+            redis.eval(refill_script, 1, "BUCKET_SIZE", total_bucket_size, refill_size)
             t = refill_interval
 
 
