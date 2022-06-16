@@ -1,3 +1,4 @@
+import uvicorn
 import multiprocessing
 import logging
 import dotenv
@@ -48,3 +49,7 @@ def load(q: int):
             return Response(None, status_code=429)
     # for q == 1 those are critical request that are allowed to pass
     return {"bucket_token_count": token_bucket.get_token_count()}
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
