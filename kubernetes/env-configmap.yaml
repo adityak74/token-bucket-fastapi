@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  BUCKET_REFILL_INTERVAL: "1"
+  BUCKET_REFILL_SIZE: "250"
+  BUCKET_SIZE: "2500"
+  CRITICAL_BUCKET: "0.2"
+  LOAD_SHEDDING: "true"
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: webserver-env
+  name: env
